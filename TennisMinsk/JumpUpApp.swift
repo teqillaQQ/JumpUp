@@ -1,10 +1,3 @@
-//
-//  JumpUpApp.swift
-//  JumpUp
-//
-//  Created by Александр Савков on 11.04.25.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -25,7 +18,7 @@ struct JumpUpApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainContentView()
         }
         .modelContainer(sharedModelContainer)
     }

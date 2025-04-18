@@ -1,10 +1,3 @@
-//
-//  Item.swift
-//  JumpUp
-//
-//  Created by Александр Савков on 11.04.25.
-//
-
 import Foundation
 import SwiftData
 

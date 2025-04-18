@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct ContentView: View {
-    let courts = testCourts
+struct MainContentView: View {
+
+    let courts = courtsMinsk
 
     var body: some View {
         TabView {
@@ -16,11 +17,5 @@ struct ContentView: View {
                 }
         }
         .accentColor(.blue)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
