@@ -4,94 +4,133 @@ import MapKit
 struct CourtListView: View {
     let courts: [Court]
 
+    @State private var searchQuery = ""
+    @State private var selectedSurface: Court.SurfaceType? = nil
+    @State private var selectedCourtType: Court.CourtType? = nil
+
+    var filteredCourts: [Court] {
+        courts.filter { court in
+            let matchesSearchQuery = court.name.localizedCaseInsensitiveContains(searchQuery) ||
+            court.address.localizedCaseInsensitiveContains(searchQuery) || searchQuery.isEmpty
+            let matchesSurface = selectedSurface == nil || court.surface.contains(selectedSurface!)
+            let matchesCourtType = selectedCourtType == nil || court.type == selectedCourtType!
+
+            return matchesSearchQuery && matchesSurface && matchesCourtType
+        }
+    }
+
     var body: some View {
-        List(courts) { court in
-            VStack(alignment: .leading, spacing: 8) {
-                Text(court.name)
-                    .font(.headline)
-                    .foregroundColor(.primary)
+        VStack {
+            SearchBar(text: $searchQuery)
 
-                Text(court.address)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                if !court.surface.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Тип покрытия:")
-                            .font(.subheadline)
-                            .bold()
-
-                        ForEach(court.surface, id: \.self) { surface in
-                            Text(surfaceDescription(surface))
-                                .font(.subheadline)
-                                .foregroundColor(.primary)
-                        }
+            HStack {
+                Picker("Тип покрытия", selection: $selectedSurface) {
+                    Text("Все типы").tag(Court.SurfaceType?.none)
+                    ForEach(Court.SurfaceType.allCases, id: \.self) { surface in
+                        Text(surfaceDescription(surface)).tag(surface as Court.SurfaceType?)
                     }
-                    .padding(.top, 4)
                 }
+                .pickerStyle(MenuPickerStyle())
+                .padding()
 
-                Text("Тип корта: \(courtTypeDescription(court.type))")
-                    .font(.subheadline)
-                    .foregroundColor(.primary)
-                    .padding(.top, 4)
+                Picker("Тип корта", selection: $selectedCourtType) {
+                    Text("Все типы").tag(Court.CourtType?.none)
+                    ForEach(Court.CourtType.allCases, id: \.self) { type in
+                        Text(courtTypeDescription(type)).tag(type as Court.CourtType?)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .padding()
+            }
 
-                if !court.contact.phoneNumbers.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Телефоны:")
-                            .font(.subheadline)
-                            .bold()
+            List(filteredCourts) { court in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(court.name)
+                        .font(.headline)
+                        .foregroundColor(.primary)
 
-                        ForEach(court.contact.phoneNumbers, id: \.self) { phone in
-                            Text(phone)
+                    Text(court.address)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    if !court.surface.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Тип покрытия:")
+                                .font(.subheadline)
+                                .bold()
+
+                            ForEach(court.surface, id: \.self) { surface in
+                                Text(surfaceDescription(surface))
+                                    .font(.subheadline)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .padding(.top, 4)
+                    }
+
+                    Text("Тип корта: \(courtTypeDescription(court.type))")
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                        .padding(.top, 4)
+
+                    if !court.contact.phoneNumbers.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Телефоны:")
+                                .font(.subheadline)
+                                .bold()
+
+                            ForEach(court.contact.phoneNumbers, id: \.self) { phone in
+                                Text(phone)
+                                    .font(.subheadline)
+                                    .foregroundColor(.blue)
+                                    .onTapGesture {
+                                        let formattedPhone = phone.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+                                        if let url = URL(string: "tel://\(formattedPhone)") {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(.top, 4)
+                    }
+
+                    if let email = court.contact.email {
+                        HStack(spacing: 4) {
+                            Text("Email:")
+                                .font(.subheadline)
+                                .bold()
+
+                            Text(email)
                                 .font(.subheadline)
                                 .foregroundColor(.blue)
                                 .onTapGesture {
-                                    let formattedPhone = phone.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-                                    if let url = URL(string: "tel://\(formattedPhone)") {
+                                    if let url = URL(string: "mailto:\(email)") {
                                         UIApplication.shared.open(url)
                                     }
                                 }
                         }
+                        .padding(.top, 4)
                     }
-                    .padding(.top, 4)
-                }
 
-                if let email = court.contact.email {
-                    HStack(spacing: 4) {
-                        Text("Email:")
-                            .font(.subheadline)
-                            .bold()
+                    if let website = court.contact.website {
+                        HStack(spacing: 4) {
+                            Text("Сайт:")
+                                .font(.subheadline)
+                                .bold()
 
-                        Text(email)
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                            .onTapGesture {
-                                if let url = URL(string: "mailto:\(email)") {
-                                    UIApplication.shared.open(url)
+                            Text(website.absoluteString)
+                                .font(.subheadline)
+                                .foregroundColor(.blue)
+                                .lineLimit(1)
+                                .onTapGesture {
+                                    UIApplication.shared.open(website)
                                 }
-                            }
+                        }
+                        .padding(.top, 4)
                     }
-                    .padding(.top, 4)
                 }
-
-                if let website = court.contact.website {
-                    HStack(spacing: 4) {
-                        Text("Сайт:")
-                            .font(.subheadline)
-                            .bold()
-
-                        Text(website.absoluteString)
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                            .lineLimit(1)
-                            .onTapGesture {
-                                UIApplication.shared.open(website)
-                            }
-                    }
-                    .padding(.top, 4)
-                }
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 8)
         }
         .navigationTitle("Теннисные корты")
     }
@@ -99,30 +138,30 @@ struct CourtListView: View {
     private func surfaceDescription(_ surface: Court.SurfaceType) -> String {
         switch surface {
         case .hard:
-            return "Твердое"
+            return "хард"
         case .clay:
-            return "Глиняное"
+            return "грунт"
         case .grass:
-            return "Травяное"
+            return "трава"
         case .carpet:
-            return "Ковровое"
+            return "ковер"
         case .artificialTurf:
-            return "Искусственный газон"
+            return "искусственная трава"
         case .unknown:
-            return "Неизвестно"
+            return "неизвестно"
         }
     }
 
     private func courtTypeDescription(_ type: Court.CourtType) -> String {
         switch type {
         case .indoor:
-            return "Закрытый"
+            return "крытый"
         case .outdoor:
-            return "Открытый"
+            return "открытый"
         case .mixed:
-            return "Смешанный"
+            return "крытый и открытый"
         case .unknown:
-            return "Неизвестно"
+            return "неизвестно"
         }
     }
 }
