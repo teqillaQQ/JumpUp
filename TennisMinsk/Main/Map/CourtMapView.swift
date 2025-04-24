@@ -2,6 +2,7 @@ import SwiftUI
 import MapKit
 
 struct CourtMapView: View {
+
     let courts: [Court]
 
     @State private var cameraPosition: MapCameraPosition

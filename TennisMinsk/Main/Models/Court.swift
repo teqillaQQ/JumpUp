@@ -89,7 +89,7 @@ struct CourtsData {
             address: "пер. Козлова, 15, Минск, Минская область",
             contact: Court.ContactInfo(
                 phoneNumbers: ["+375 29 191-91-25", "+375 17 392-26-01", "+375 25 693-01-90", "+375 44 793-55-83"],
-                email: "info@sporting.by",
+                email: "info@smenatennis.by",
                 website: URL(string: "https://smenatennis.by")
             ),
             surface: [.hard],
@@ -100,7 +100,7 @@ struct CourtsData {
             location: CLLocationCoordinate2D(latitude: 53.923996, longitude: 27.519096),
             address: "пр-т Победителей, 63, Минск, Минская область",
             contact: Court.ContactInfo(
-                phoneNumbers: ["+375 29 343-73-28", " +375 17 226-91-82"],
+                phoneNumbers: ["+375 29 343-73-28", "+375 17 226-91-82"],
                 email: "center@tennisbel.by",
                 website: URL(string: "https://tennisbel.by/")
             ),
@@ -112,7 +112,7 @@ struct CourtsData {
             location: CLLocationCoordinate2D(latitude: 53.917103, longitude: 27.480722),
             address: "ул. Жудро, 40, Минск, Минская область",
             contact: Court.ContactInfo(
-                phoneNumbers: ["+375 29 604-15-87 ,+37529 675 21 45"],
+                phoneNumbers: ["+375 29 604-15-87", "+375 29 675 21 45"],
                 email: "reception@gcor-tennis.by",
                 website: URL(string: "https://gcor-tennis.by/")
             ),
