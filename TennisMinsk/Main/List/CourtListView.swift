@@ -15,6 +15,26 @@ struct CourtListView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
 
+                if !court.surface.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Тип покрытия:")
+                            .font(.subheadline)
+                            .bold()
+
+                        ForEach(court.surface, id: \.self) { surface in
+                            Text(surfaceDescription(surface))
+                                .font(.subheadline)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .padding(.top, 4)
+                }
+
+                Text("Тип корта: \(courtTypeDescription(court.type))")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                    .padding(.top, 4)
+
                 if !court.contact.phoneNumbers.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Телефоны:")
@@ -74,5 +94,35 @@ struct CourtListView: View {
             .padding(.vertical, 8)
         }
         .navigationTitle("Теннисные корты")
+    }
+
+    private func surfaceDescription(_ surface: Court.SurfaceType) -> String {
+        switch surface {
+        case .hard:
+            return "Твердое"
+        case .clay:
+            return "Глиняное"
+        case .grass:
+            return "Травяное"
+        case .carpet:
+            return "Ковровое"
+        case .artificialTurf:
+            return "Искусственный газон"
+        case .unknown:
+            return "Неизвестно"
+        }
+    }
+
+    private func courtTypeDescription(_ type: Court.CourtType) -> String {
+        switch type {
+        case .indoor:
+            return "Закрытый"
+        case .outdoor:
+            return "Открытый"
+        case .mixed:
+            return "Смешанный"
+        case .unknown:
+            return "Неизвестно"
+        }
     }
 }

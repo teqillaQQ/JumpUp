@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainContentView: View {
 
-    let courts = courtsMinsk
+    let courts = CourtsData.courtsMinsk
 
     var body: some View {
         TabView {
