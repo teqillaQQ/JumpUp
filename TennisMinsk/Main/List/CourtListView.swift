@@ -53,6 +53,11 @@ struct CourtListView: View {
                     .padding()
                 }
 
+                Text("Количество кортов: \(filteredCourts.count)")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
                 List(filteredCourts) { court in
                     VStack(alignment: .leading, spacing: 8) {
                         HighlightedText(text: court.name, searchText: searchQuery)
@@ -93,7 +98,10 @@ struct CourtListView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.blue)
                                         .onTapGesture {
-                                            let formattedPhone = phone.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+                                            let formattedPhone = phone.components(
+                                                separatedBy: CharacterSet.decimalDigits.inverted
+                                            ).joined()
+
                                             if let url = URL(string: "tel://\(formattedPhone)") {
                                                 UIApplication.shared.open(url)
                                             }
