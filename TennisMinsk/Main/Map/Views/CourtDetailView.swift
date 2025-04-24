@@ -2,7 +2,10 @@ import SwiftUI
 import MapKit
 
 struct CourtDetailView: View {
+
     let court: Court
+
+    @State private var showAllPhones = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -18,6 +21,25 @@ struct CourtDetailView: View {
                                 .foregroundColor(.secondary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 16)
+
+                        Divider()
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Характеристики")
+                                .font(.headline)
+
+                            HStack {
+                                Image(systemName: "square.stack.3d.up.fill")
+                                Text("Тип корта: \(courtTypeText(court.type))")
+                            }
+
+                            HStack(alignment: .top) {
+                                Image(systemName: "circle.grid.2x2.fill")
+                                Text("Покрытие: ") +
+                                Text(court.surface.map { surfaceText($0) }.joined(separator: ", "))
+                            }
+                        }
 
                         Divider()
 
@@ -26,12 +48,27 @@ struct CourtDetailView: View {
                                 Text("Контакты")
                                     .font(.headline)
 
-                                ForEach(court.contact.phoneNumbers, id: \.self) { phone in
+                                let phonesToShow = showAllPhones ? court.contact.phoneNumbers : [court.contact.phoneNumbers.first].compactMap { $0 }
+
+                                ForEach(phonesToShow, id: \.self) { phone in
                                     ContactRowView(
                                         icon: "phone.fill",
                                         text: phone,
                                         action: { callNumber(phone: phone) }
                                     )
+                                }
+
+                                if court.contact.phoneNumbers.count > 1 {
+                                    Button(action: {
+                                        withAnimation {
+                                            showAllPhones.toggle()
+                                        }
+                                    }) {
+                                        Text(showAllPhones ? "Скрыть номера" : "Показать все номера")
+                                            .font(.subheadline)
+                                            .foregroundColor(.blue)
+                                            .padding(.top, 4)
+                                    }
                                 }
                             }
                         }
@@ -95,5 +132,25 @@ struct CourtDetailView: View {
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = court.name
         mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving])
+    }
+
+    private func surfaceText(_ surface: Court.SurfaceType) -> String {
+        switch surface {
+        case .hard: return "Хард"
+        case .clay: return "Грунт"
+        case .grass: return "Трава"
+        case .carpet: return "Ковёр"
+        case .artificialTurf: return "Искусственная трава"
+        case .unknown: return "Неизвестно"
+        }
+    }
+
+    private func courtTypeText(_ type: Court.CourtType) -> String {
+        switch type {
+        case .indoor: return "Крытый"
+        case .outdoor: return "Открытый"
+        case .mixed: return "Крытый и открытый"
+        case .unknown: return "Неизвестно"
+        }
     }
 }

@@ -1,7 +1,22 @@
-import Foundation
-import MapKit
+import CoreLocation
 
 struct Court: Identifiable {
+
+    enum SurfaceType: CaseIterable {
+        case hard
+        case clay
+        case grass
+        case carpet
+        case artificialTurf
+        case unknown
+    }
+
+    enum CourtType: CaseIterable {
+        case indoor
+        case outdoor
+        case mixed
+        case unknown
+    }
 
     struct ContactInfo {
         let phoneNumbers: [String]
@@ -14,7 +29,10 @@ struct Court: Identifiable {
     let location: CLLocationCoordinate2D
     let address: String
     let contact: ContactInfo
+    let surface: [SurfaceType]
+    let type: CourtType
 }
+
 
 let courtsMinsk: [Court] = [
     Court(
@@ -25,7 +43,9 @@ let courtsMinsk: [Court] = [
             phoneNumbers: ["+375 29 538-33-00"],
             email: nil,
             website: URL(string: "https://www.instagram.com/matchpoint.minsk")
-        )
+        ),
+        surface: [.hard, .artificialTurf],
+        type: .mixed
     ),
     Court(
         name: "Fox Tennis",
@@ -35,7 +55,9 @@ let courtsMinsk: [Court] = [
             phoneNumbers: ["+375 29 130-70-30"],
             email: nil,
             website: URL(string: "https://fox-tennis.by/")
-        )
+        ),
+        surface: [.clay],
+        type: .outdoor
     ),
     Court(
         name: "Белорусская Федерация Пляжного Тенниса\nКЛУБ ТЕННИСА",
@@ -45,7 +67,9 @@ let courtsMinsk: [Court] = [
             phoneNumbers: ["+375 29 310-55-55", "+375 17 240-48-28"],
             email: "info@tennisclub.by",
             website: URL(string: "https://tennisclub.by/")
-        )
+        ),
+        surface: [.hard, .artificialTurf],
+        type: .mixed
     ),
     Court(
         name: "Sporting Club",
@@ -55,6 +79,20 @@ let courtsMinsk: [Court] = [
             phoneNumbers: ["+375 29 135 00 00"],
             email: "info@sporting.by",
             website: URL(string: "https://sporting.by/")
-        )
+        ),
+        surface: [.artificialTurf],
+        type: .outdoor
+    ),
+    Court(
+        name: "СДЮШОР по теннису Смена",
+        location: CLLocationCoordinate2D(latitude: 53.899435, longitude: 27.597045),
+        address: "пер. Козлова, 15, Минск, Минская область",
+        contact: Court.ContactInfo(
+            phoneNumbers: ["+375 29 191-91-25", "+375 17 392-26-01", "+375 25 693-01-90", "+375 44 793-55-83"],
+            email: "info@sporting.by",
+            website: URL(string: "https://smenatennis.by")
+        ),
+        surface: [.hard],
+        type: .outdoor
     )
 ]
