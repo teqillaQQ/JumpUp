@@ -55,11 +55,10 @@ struct CourtListView: View {
 
                 List(filteredCourts) { court in
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(court.name)
+                        HighlightedText(text: court.name, searchText: searchQuery)
                             .font(.headline)
-                            .foregroundColor(.primary)
 
-                        Text(court.address)
+                        HighlightedText(text: court.address, searchText: searchQuery)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
