@@ -25,6 +25,7 @@ struct Court: Identifiable {
     }
 
     let id = UUID()
+    let persistentID: String
     let name: String
     let location: CLLocationCoordinate2D
     let address: String
@@ -36,6 +37,7 @@ struct Court: Identifiable {
 struct CourtsData {
     static let courtsMinsk: [Court] = [
         Court(
+            persistentID: "court-0001",
             name: "Теннисный клуб \nМатч Поинт",
             location: CLLocationCoordinate2D(latitude: 53.958578, longitude: 27.59282),
             address: "4-й пер. Кольцова 6а, Минск, Минская область 220131, Беларусь",
@@ -48,6 +50,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0002",
             name: "Fox Tennis",
             location: CLLocationCoordinate2D(latitude: 53.941704, longitude: 27.623001),
             address: "ул. Севастопольская, Минск, Минская область",
@@ -60,6 +63,7 @@ struct CourtsData {
             type: .outdoor
         ),
         Court(
+            persistentID: "court-0003",
             name: "Белорусская Федерация Пляжного Тенниса\nКЛУБ ТЕННИСА",
             location: CLLocationCoordinate2D(latitude: 53.951425, longitude: 27.581205),
             address: "ул. Кольцова 112, Минск, Минская область",
@@ -72,6 +76,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0004",
             name: "Sporting Club",
             location: CLLocationCoordinate2D(latitude: 53.954946, longitude: 27.712304),
             address: "просп. Независимости, 193, Минск, Минская область",
@@ -84,6 +89,7 @@ struct CourtsData {
             type: .outdoor
         ),
         Court(
+            persistentID: "court-0005",
             name: "СДЮШОР по теннису \nСмена",
             location: CLLocationCoordinate2D(latitude: 53.899435, longitude: 27.597045),
             address: "пер. Козлова, 15, Минск, Минская область",
@@ -96,6 +102,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0006",
             name: "Республиканский центр олимпийской подготовки по теннису",
             location: CLLocationCoordinate2D(latitude: 53.923996, longitude: 27.519096),
             address: "пр-т Победителей, 63, Минск, Минская область",
@@ -108,6 +115,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0007",
             name: "Городской центр олимпийского резерва по теннису",
             location: CLLocationCoordinate2D(latitude: 53.917103, longitude: 27.480722),
             address: "ул. Жудро, 40, Минск, Минская область",
@@ -120,6 +128,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0008",
             name: "Теннисный центр \n«Аква-Минск»",
             location: CLLocationCoordinate2D(latitude: 53.867268, longitude: 27.591276),
             address: "пр-т Рокоссовского, 44/2, Минск, Минская область",
@@ -132,6 +141,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0009",
             name: "Falcon Club",
             location: CLLocationCoordinate2D(latitude: 53.932643, longitude: 27.510065),
             address: "пр-т Победителей, 20, Минск, Минская область",
@@ -144,6 +154,7 @@ struct CourtsData {
             type: .indoor
         ),
         Court(
+            persistentID: "court-0010",
             name: "WIMC",
             location: CLLocationCoordinate2D(latitude: 53.908682, longitude: 27.620919),
             address: "ул. Столетова, 1А, Минск, Минская область",
@@ -156,6 +167,7 @@ struct CourtsData {
             type: .mixed
         ),
         Court(
+            persistentID: "court-0011",
             name: "Avante",
             location: CLLocationCoordinate2D(latitude: 53.873436, longitude: 27.498473),
             address: "ул. Железнодорожная, 138, Минск, Минская область",

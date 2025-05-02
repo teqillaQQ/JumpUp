@@ -1,6 +1,9 @@
+import SwiftData
 import SwiftUI
 
 struct MainContentView: View {
+
+    @Environment(\.modelContext) private var modelContext
 
     let courts = CourtsData.courtsMinsk
 
@@ -17,5 +20,8 @@ struct MainContentView: View {
                 }
         }
         .accentColor(.blue)
+        .onAppear {
+            CourtDataService.shared.modelContext = modelContext
+        }
     }
 }

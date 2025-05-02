@@ -22,3 +22,7 @@ struct ContactRowView: View {
         .foregroundColor(.blue)
     }
 }
+
+#Preview {
+    ContactRowView(icon: "phone.fill", text: "+375 29 555 66 77") { }
+}
