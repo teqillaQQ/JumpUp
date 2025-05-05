@@ -2,18 +2,27 @@ import SwiftUI
 
 struct CourtMapSheetRatingView: View {
 
-    @Binding var rating: Int
-    @Binding var comment: String
+    private let scrollProxy: ScrollViewProxy
+    private let onSave: () -> Void
 
-    var onSave: () -> Void
+    @Binding private var rating: Int
+    @Binding private var comment: String
+
+    @FocusState private var isTextFieldFocused: Bool
 
     @State private var initialRating: Int
     @State private var initialComment: String
     @State private var showSavedText = false
 
-    init(rating: Binding<Int>, comment: Binding<String>, onSave: @escaping () -> Void) {
+    init(
+        rating: Binding<Int>,
+        comment: Binding<String>,
+        scrollProxy: ScrollViewProxy,
+        onSave: @escaping () -> Void
+    ) {
         _rating = rating
         _comment = comment
+        self.scrollProxy = scrollProxy
         self.onSave = onSave
         _initialRating = State(initialValue: rating.wrappedValue)
         _initialComment = State(initialValue: comment.wrappedValue)
@@ -35,9 +44,24 @@ struct CourtMapSheetRatingView: View {
             Text("Комментарий:")
                 .font(.headline)
 
-            TextField("Введите комментарий", text: $comment)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.bottom)
+            ZStack(alignment: .topLeading) {
+                TextEditor(text: $comment)
+                    .focused($isTextFieldFocused)
+                    .frame(minHeight: 100, maxHeight: 140)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.5))
+                    )
+
+                if comment.isEmpty {
+                    Text("Введите комментарий")
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 8)
+                }
+            }
+            .padding(.bottom)
+            .id("CommentTextField")
 
             Button(action: {
                 onSave()
@@ -54,6 +78,15 @@ struct CourtMapSheetRatingView: View {
                     .background(Capsule().strokeBorder())
             }
             .disabled(!isButtonEnabled)
+        }
+        .onChange(of: isTextFieldFocused) { oldValue, newValue in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    withAnimation {
+                        scrollProxy.scrollTo("CommentTextField", anchor: .center)
+                    }
+                }
+            }
         }
     }
 
@@ -87,8 +120,11 @@ struct CourtMapSheetRatingView: View {
 }
 
 #Preview {
-    CourtMapSheetRatingView(
-        rating: .constant(5),
-        comment: .constant("Хороший корт")
-    ) { }
+    ScrollViewReader { proxy in
+        CourtMapSheetRatingView(
+            rating: .constant(5),
+            comment: .constant("Хороший корт"),
+            scrollProxy: proxy
+        ) {}
+    }
 }

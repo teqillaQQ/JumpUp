@@ -17,30 +17,33 @@ struct CourtMapSheetView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom) {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        CourtMapSheetHeaderView(name: court.name, address: court.address)
-                        CourtMapSheetCharacteristicsView(type: court.type, surface: court.surface)
-                        CourtMapSheetContactsInfoView(
-                            contactInfo: court.contact,
-                            onCall: callNumber,
-                            onEmail: sendEmail,
-                            onOpenWebsite: openWebsite
-                        )
-                        CourtMapSheetRatingView(
-                            rating: $rating,
-                            comment: $comment,
-                            onSave: saveRatingAndComment
-                        )
-                    }
-                    .padding()
-                    .padding(.bottom, 60)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            CourtMapSheetHeaderView(name: court.name, address: court.address)
+                            CourtMapSheetCharacteristicsView(type: court.type, surface: court.surface)
+                            CourtMapSheetContactsInfoView(
+                                contactInfo: court.contact,
+                                onCall: callNumber,
+                                onEmail: sendEmail,
+                                onOpenWebsite: openWebsite
+                            )
+                            CourtMapSheetRatingView(
+                                rating: $rating,
+                                comment: $comment,
+                                scrollProxy: proxy,
+                                onSave: saveRatingAndComment
+                            )
+                        }
+                        .padding()
+                        .padding(.bottom, 60)
 
-                    CourtMapSheetRouteButtonView {
-                        openInMaps(coordinate: court.location)
+                        CourtMapSheetRouteButtonView {
+                            openInMaps(coordinate: court.location)
+                        }
                     }
+                    .hideKeyboardOnTap()
                 }
-                .hideKeyboardOnTap()
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
