@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct JumpUpApp: App {
+struct TennisMinskApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([CourtSwiftData.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)

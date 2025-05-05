@@ -9,7 +9,7 @@ struct CourtListView: View {
     @State private var selectedSurface: Court.SurfaceType? = nil
     @State private var selectedCourtType: Court.CourtType? = nil
 
-    var filteredCourts: [Court] {
+    private var filteredCourts: [Court] {
         courts.filter { court in
             let matchesSearchQuery = searchQuery.isEmpty ||
             court.name.localizedCaseInsensitiveContains(searchQuery) ||
@@ -23,25 +23,19 @@ struct CourtListView: View {
     }
 
     var body: some View {
-        ZStack {
-            Color.clear
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIApplication.shared.endEditing()
-                }
+        NavigationView {
 
             VStack {
                 SearchBar(text: $searchQuery)
 
                 HStack {
-                    Picker("Тип покрытия", selection: $selectedSurface) {
+                    Picker("Тип покрытия покрытия", selection: $selectedSurface) {
                         Text("Все типы").tag(Court.SurfaceType?.none)
                         ForEach(Court.SurfaceType.allCases, id: \.self) { surface in
                             Text(surfaceDescription(surface)).tag(surface as Court.SurfaceType?)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .padding()
 
                     Picker("Тип корта", selection: $selectedCourtType) {
                         Text("Все типы").tag(Court.CourtType?.none)
@@ -50,10 +44,9 @@ struct CourtListView: View {
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .padding()
                 }
 
-                Text("Количество кортов: \(filteredCourts.count)")
+                Text("Кортов: \(filteredCourts.count)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding(.bottom, 4)
@@ -148,12 +141,12 @@ struct CourtListView: View {
                     }
                     .padding(.vertical, 8)
                     .contentShape(Rectangle())
-                    .onTapGesture {
-                        UIApplication.shared.endEditing()
-                    }
                 }
             }
-            .navigationTitle("Теннисные корты")
+            .navigationTitle("Список кортов")
+        }
+        .onTapGesture {
+            UIApplication.shared.endEditing()
         }
     }
 
@@ -176,4 +169,8 @@ struct CourtListView: View {
         case .unknown: return "неизвестно"
         }
     }
+}
+
+#Preview {
+    CourtListView(courts: CourtsData.courtsMinsk)
 }

@@ -11,12 +11,17 @@ struct MainContentView: View {
         TabView {
             CourtMapView(courts: courts)
                 .tabItem {
-                    Label("Карта", systemImage: "map")
+                    Label("Карта", systemImage: "location")
                 }
 
             CourtListView(courts: courts)
                 .tabItem {
                     Label("Список", systemImage: "list.bullet")
+                }
+
+            FAQView()
+                .tabItem {
+                    Label("FAQ", systemImage: "questionmark.circle")
                 }
         }
         .accentColor(.blue)
@@ -24,4 +29,8 @@ struct MainContentView: View {
             CourtDataService.shared.modelContext = modelContext
         }
     }
+}
+
+#Preview {
+    MainContentView()
 }

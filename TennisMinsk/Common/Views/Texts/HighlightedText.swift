@@ -31,3 +31,7 @@ struct HighlightedText: View {
         return attributed
     }
 }
+
+#Preview {
+    HighlightedText(text: "Железнодорожая 138", searchText: "ая 138")
+}
