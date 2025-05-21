@@ -38,13 +38,13 @@ struct CourtsData {
     static let courtsMinsk: [Court] = [
         Court(
             persistentID: "court-0001",
-            name: "Теннисный клуб \nМатч Поинт",
-            location: CLLocationCoordinate2D(latitude: 53.958578, longitude: 27.59282),
+            name: "Fox Tennis",
+            location: CLLocationCoordinate2D(latitude: 53.9583, longitude: 27.5935),
             address: "4-й пер. Кольцова 6а, Минск, Минская область 220131, Беларусь",
             contact: Court.ContactInfo(
-                phoneNumbers: ["+375 29 538-33-00"],
+                phoneNumbers: ["+375 29 130-70-30"],
                 email: nil,
-                website: URL(string: "https://www.instagram.com/matchpoint.minsk")
+                website: URL(string: "https://www.instagram.com/foxtennisclub/")
             ),
             surface: [.hard, .artificialTurf],
             type: .mixed
@@ -53,11 +53,11 @@ struct CourtsData {
             persistentID: "court-0002",
             name: "Fox Tennis",
             location: CLLocationCoordinate2D(latitude: 53.941704, longitude: 27.623001),
-            address: "ул. Севастопольская, Минск, Минская область",
+            address: "ул. Кнорина, 50, Севастопольский парк, Минск, Минская область",
             contact: Court.ContactInfo(
                 phoneNumbers: ["+375 29 130-70-30"],
                 email: nil,
-                website: URL(string: "https://fox-tennis.by/")
+                website: URL(string: "https://www.instagram.com/foxtennisclub/")
             ),
             surface: [.clay],
             type: .outdoor
@@ -178,6 +178,19 @@ struct CourtsData {
             ),
             surface: [.hard],
             type: .indoor
+        ),
+        Court(
+            persistentID: "court-0012",
+            name: "Теннисный клуб \nМатч Поинт",
+            location: CLLocationCoordinate2D(latitude: 53.958578, longitude: 27.59282),
+            address: "4-й пер. Кольцова 6а, Минск, Минская область 220131, Беларусь",
+            contact: Court.ContactInfo(
+                phoneNumbers: ["+375 29 538-33-00"],
+                email: nil,
+                website: URL(string: "https://www.instagram.com/matchpoint.minsk")
+            ),
+            surface: [.hard, .artificialTurf],
+            type: .mixed
         )
     ]
 }
