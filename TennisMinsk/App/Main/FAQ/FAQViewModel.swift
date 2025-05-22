@@ -27,8 +27,26 @@ final class FAQViewModel: ObservableObject {
     // MARK: - Actions
 
     func fetchFaqs() {
+       loadFaqs()
+    }
+}
+
+// MARK: - Requests
+
+private extension FAQViewModel {
+    func loadFaqs() {
+        let loader = self.loader
+
         Task {
-            await loadFaqs()
+            do {
+                let loadedFaqs = try await Task.detached {
+                    try await loader.loadFaqs()
+                }.value
+
+                self.faqs = loadedFaqs
+            } catch {
+                print("❌ Failed to load FAQs: \(error.localizedDescription)")
+            }
         }
     }
 }
@@ -36,16 +54,6 @@ final class FAQViewModel: ObservableObject {
 // MARK: - Private Methods
 
 private extension FAQViewModel {
-
-    func loadFaqs() async {
-        do {
-            let loadedFaqs = try await loader.loadFaqs()
-            self.faqs = loadedFaqs
-        } catch {
-            print("❌ Failed to load FAQs: \(error.localizedDescription)")
-        }
-    }
-
     func filterFaqs(with query: String) -> [FAQ] {
         guard !query.isEmpty else { return faqs }
 
@@ -56,17 +64,23 @@ private extension FAQViewModel {
     }
 }
 
-protocol FAQLoaderProtocol {
+protocol FAQLoaderProtocol: Sendable {
     func loadFaqs() async throws -> [FAQ]
 }
 
-actor FAQLoader: FAQLoaderProtocol {
+final class FAQLoader: FAQLoaderProtocol {
     func loadFaqs() async throws -> [FAQ] {
         guard let url = Bundle.main.url(forResource: "faqs", withExtension: "json") else {
-            throw NSError(domain: "FAQLoader", code: 1, userInfo: [NSLocalizedDescriptionKey: "Could not find faqs.json in bundle"])
+            throw NSError(
+                domain: "FAQLoader",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Could not find faqs.json in bundle"]
+            )
         }
 
         let data = try Data(contentsOf: url)
-        return try JSONDecoder().decode([FAQ].self, from: data)
+        let faqs = try JSONDecoder().decode([FAQ].self, from: data)
+
+        return faqs
     }
 }

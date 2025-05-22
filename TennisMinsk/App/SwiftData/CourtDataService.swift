@@ -6,7 +6,7 @@ final class CourtDataService {
 
     var modelContext: ModelContext!
 
-    static let shared = CourtDataService()
+    @MainActor static let shared = CourtDataService()
 
     private init() {}
 
