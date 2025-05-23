@@ -10,23 +10,6 @@ final class CourtDataService {
 
     private init() {}
 
-    func saveOrUpdateCourt(persistentID: String, rating: Int, comment: String) {
-        if let existingCourtNote = fetchCourtByID(persistentID) {
-            existingCourtNote.rating = rating
-            existingCourtNote.comment = comment
-            existingCourtNote.createdAt = Date()
-
-            print("Обновлена существующая запись с persistentID: \(persistentID)")
-        } else {
-            let newCourtNote = CourtSwiftData(persistentID: persistentID, rating: rating, comment: comment)
-            modelContext.insert(newCourtNote)
-
-            print("Создана новая запись с persistentID: \(persistentID)")
-        }
-
-        saveChanges()
-    }
-
     func fetchAllCourts() -> [CourtSwiftData] {
         let fetchDescriptor = FetchDescriptor<CourtSwiftData>()
 
@@ -55,15 +38,21 @@ final class CourtDataService {
         }
     }
 
-    func deleteCourtByID(_ persistentID: String) {
-        if let courtNoteToDelete = fetchCourtByID(persistentID) {
-            modelContext.delete(courtNoteToDelete)
+    func saveOrUpdateCourt(persistentID: String, rating: Int, comment: String) {
+        if let existingCourtNote = fetchCourtByID(persistentID) {
+            existingCourtNote.rating = rating
+            existingCourtNote.comment = comment
+            existingCourtNote.createdAt = Date()
 
-            print("Удалена запись с persistentID: \(persistentID)")
-            saveChanges()
+            print("Обновлена существующая запись с persistentID: \(persistentID)")
         } else {
-            print("Не найдена запись для удаления с persistentID: \(persistentID)")
+            let newCourtNote = CourtSwiftData(persistentID: persistentID, rating: rating, comment: comment)
+            modelContext.insert(newCourtNote)
+
+            print("Создана новая запись с persistentID: \(persistentID)")
         }
+
+        saveChanges()
     }
 
     private func saveChanges() {
@@ -73,6 +62,17 @@ final class CourtDataService {
             print("Изменения сохранены в базе данных.")
         } catch {
             print("Ошибка при сохранении данных: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteCourtByID(_ persistentID: String) {
+        if let courtNoteToDelete = fetchCourtByID(persistentID) {
+            modelContext.delete(courtNoteToDelete)
+
+            print("Удалена запись с persistentID: \(persistentID)")
+            saveChanges()
+        } else {
+            print("Не найдена запись для удаления с persistentID: \(persistentID)")
         }
     }
 }

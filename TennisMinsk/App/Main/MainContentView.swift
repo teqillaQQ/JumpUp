@@ -23,10 +23,16 @@ struct MainContentView: View {
                 .tabItem {
                     Label("FAQ", systemImage: "questionmark.circle")
                 }
+
+            PlayerProfileView()
+                .tabItem {
+                    Label("Профиль", systemImage: "person.circle")
+                }
         }
         .accentColor(.blue)
         .onAppear {
             CourtDataService.shared.modelContext = modelContext
+            PlayerProfileDataService.shared.modelContext = modelContext
         }
     }
 }

@@ -4,7 +4,10 @@ import SwiftData
 @main
 struct TennisMinskApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([CourtSwiftData.self])
+        let schema = Schema([
+            CourtSwiftData.self,
+            PlayerProfileSwiftData.self
+        ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
