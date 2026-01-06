@@ -14,6 +14,11 @@ struct MainContentView: View {
                     Label("Карта", systemImage: "location")
                 }
 
+            GamesView()
+                .tabItem {
+                    Label("История", systemImage: "book")
+                }
+            
             CourtListView(courts: courts)
                 .tabItem {
                     Label("Список", systemImage: "list.bullet")

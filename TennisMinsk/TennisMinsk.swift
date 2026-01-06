@@ -16,10 +16,20 @@ struct TennisMinskApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
+    @AppStorage("onboarding.completed") private var onboardingCompleted: Bool = false
+    
     var body: some Scene {
         WindowGroup {
-            MainContentView()
+            ZStack {
+                MainContentView()
+                
+                if !onboardingCompleted {
+                    OnboardingView(isPresented: $onboardingCompleted)
+                        .transition(.opacity)
+                        .zIndex(1)
+                }
+            }
         }
         .modelContainer(sharedModelContainer)
     }
